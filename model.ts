@@ -1,5 +1,6 @@
 import { Plugin, moment, TFile } from "obsidian";
 import { getDailyNoteSettings } from "obsidian-daily-notes-interface";
+import type { FutureDatesSettings } from "./settings";
 
 // source file -> texts where day (target) is mentioned
 export type Mentions = Record<string, Array<string>>;
@@ -13,11 +14,13 @@ export default class Model extends EventTarget {
 
 	dates: Array<string> = [];
 	plugin: Plugin;
+	settings: FutureDatesSettings;
 
-	constructor(plugin: Plugin) {
+	constructor(plugin: Plugin, settings: FutureDatesSettings) {
 		super();
 
 		this.plugin = plugin;
+		this.settings = settings;
 
 		const cache = plugin.app.metadataCache;
 		plugin.registerEvent(
@@ -36,9 +39,22 @@ export default class Model extends EventTarget {
 		const notes: FutureNotes = {};
 
 		for (const sourcePath in allLinks) {
+			// Skip files in excluded folders
+			if (this.isInExcludedFolder(sourcePath)) {
+				continue;
+			}
+
 			for (const targetPath in allLinks[sourcePath]) {
 				const date = this.extractDate(targetPath);
-				if (date && moment(date).isAfter(moment(), "day")) {
+
+				if (!date) {
+					continue;
+				}
+
+				const dateCondition = this.settings.showPastDates
+					|| moment(date).isAfter(moment(), "day");
+
+				if (dateCondition) {
 					if (!notes[date]) {
 						notes[date] = {};
 					}
@@ -63,7 +79,6 @@ export default class Model extends EventTarget {
 						);
 
 						for (const mention of mentions) {
-							console.log(mention);
 							notes[date][sourcePath].push(mention);
 						}
 					}
@@ -131,9 +146,14 @@ export default class Model extends EventTarget {
 		const matches: string[] = [];
 		const lines = text.split("\n");
 		const patternLength = pattern.length;
-		const maxContextLength = 50;
+		const maxContextLength = this.settings.contextLength;
 
 		for (const line of lines) {
+			// Check if line should be excluded
+			if (this.shouldExcludeLine(line, pattern)) {
+				continue;
+			}
+
 			let startIndex = line.indexOf(pattern);
 			while (startIndex !== -1) {
 				const start = Math.max(startIndex - maxContextLength, 0);
@@ -141,12 +161,85 @@ export default class Model extends EventTarget {
 					startIndex + patternLength + maxContextLength,
 					line.length
 				);
-				matches.push(line.substring(start, end));
+				let substring = line.substring(start, end);
+
+				// Replace [[date]] with just date for cleaner display
+				substring = substring.replace(/\[\[([^\]]+)\]\]/g, '$1');
+
+				matches.push(substring);
 
 				startIndex = line.indexOf(pattern, startIndex + patternLength);
 			}
 		}
 
 		return matches;
+	}
+
+	shouldExcludeLine(line: string, pattern: string): boolean {
+		// Exclude dates with display text (e.g., [[2025-10-19|Next Day]])
+		if (this.settings.excludeDatesWithDisplayText) {
+			// Check if the pattern appears with a pipe character (display text)
+			const dateWithDisplayText = new RegExp(`\\[\\[${this.escapeRegex(pattern.slice(2, -2))}\\|[^\\]]+\\]\\]`);
+			if (dateWithDisplayText.test(line)) {
+				return true;
+			}
+		}
+
+		// Exclude lines containing navigation keywords
+		if (this.settings.excludeNavigationKeywords) {
+			const lowerLine = line.toLowerCase();
+			for (const keyword of this.settings.navigationKeywords) {
+				if (lowerLine.includes(keyword.toLowerCase())) {
+					return true;
+				}
+			}
+		}
+
+		// Exclude lines matching custom patterns
+		if (this.settings.excludeCustomPatterns) {
+			for (const patternStr of this.settings.customPatterns) {
+				try {
+					const regex = new RegExp(patternStr);
+					if (regex.test(line)) {
+						return true;
+					}
+				} catch (e) {
+					// Invalid regex pattern, skip it
+					console.warn(`Invalid exclusion pattern: ${patternStr}`, e);
+				}
+			}
+		}
+
+		return false;
+	}
+
+	escapeRegex(str: string): string {
+		return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+	}
+
+	isInExcludedFolder(filePath: string): boolean {
+		if (!this.settings.excludeFolders) {
+			return false;
+		}
+
+		for (const excludedFolder of this.settings.excludedFolders) {
+			// Check if file path starts with excluded folder path
+			// Handle both with and without trailing slash
+			const normalizedFolder = excludedFolder.endsWith('/')
+				? excludedFolder
+				: excludedFolder + '/';
+
+			if (filePath.startsWith(normalizedFolder) || filePath.startsWith(excludedFolder + '\\')) {
+				return true;
+			}
+
+			// Also check if file is directly in the folder (for files at folder root)
+			const fileFolder = filePath.substring(0, filePath.lastIndexOf('/'));
+			if (fileFolder === excludedFolder) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

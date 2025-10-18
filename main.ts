@@ -1,17 +1,23 @@
 import { Plugin } from "obsidian";
 import Model from "./model";
 import FutureDatesView from "./view";
+import { FutureDatesSettings, DEFAULT_SETTINGS, FutureDatesSettingTab } from "./settings";
 
 class ObsidianFutureDatesPlugin extends Plugin {
 	model: Model;
+	settings: FutureDatesSettings;
 
 	async onload() {
-		this.model = new Model(this);
+		await this.loadSettings();
+
+		this.model = new Model(this, this.settings);
 
 		this.registerView(
 			FutureDatesView.TYPE,
 			(leaf) => new FutureDatesView(leaf, this.model, this.app.workspace)
 		);
+
+		this.addSettingTab(new FutureDatesSettingTab(this.app, this));
 
 		this.app.workspace.onLayoutReady(() => {
 			this.initLeaf();
@@ -20,6 +26,14 @@ class ObsidianFutureDatesPlugin extends Plugin {
 
 	async onunload() {
 		this.model.finish();
+	}
+
+	async loadSettings() {
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+	}
+
+	async saveSettings() {
+		await this.saveData(this.settings);
 	}
 
 	initLeaf(): void {
@@ -35,4 +49,5 @@ class ObsidianFutureDatesPlugin extends Plugin {
 	}
 }
 
+export default ObsidianFutureDatesPlugin;
 module.exports = ObsidianFutureDatesPlugin;

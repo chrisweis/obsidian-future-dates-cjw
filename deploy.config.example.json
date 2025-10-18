@@ -1,0 +1,9 @@
+{
+  "vaultPath": "C:/Path/To/Your/Vault/.obsidian/plugins/future-dates-cjw",
+  "pluginId": "future-dates-cjw",
+  "filesToCopy": [
+    "main.js",
+    "manifest.json",
+    "styles.css"
+  ]
+}
