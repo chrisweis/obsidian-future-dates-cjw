@@ -603,6 +603,6 @@ User Clicks Link
 ## Approval
 
 **Specification Status:** Implemented
-**Implementation Version:** v1.3.4
-**Last Updated:** 2025-10-18
+**Implementation Version:** v1.6.0
+**Last Updated:** 2025-10-19
 **Spec Version:** 1.0
