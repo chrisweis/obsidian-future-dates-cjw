@@ -1,4 +1,4 @@
-import { ItemView, WorkspaceLeaf, Workspace, setIcon, moment } from "obsidian";
+import { ItemView, WorkspaceLeaf, Workspace, setIcon, moment, TFile } from "obsidian";
 import Model, { type FutureNotes, type Mentions } from "./model";
 import type ObsidianFutureDatesPlugin from "./main";
 import type { DateFilter } from "./settings";
@@ -113,6 +113,13 @@ export default class View extends ItemView {
 				}
 			}
 
+			// Apply frontmatter exclusion if enabled for this filter
+			if (filter.excludeByFrontmatter) {
+				if (this.isExcludedByFrontmatter(mention.sourcePath)) {
+					return false;
+				}
+			}
+
 			return true;
 		});
 	}
@@ -133,6 +140,22 @@ export default class View extends ItemView {
 		// Check if file path starts with or equals filter path
 		return normalizedFilePath === normalizedFilterPath ||
 		       normalizedFilePath.startsWith(normalizedFilterPath + "/");
+	}
+
+	isExcludedByFrontmatter(filePath: string): boolean {
+		const file = this.app.vault.getAbstractFileByPath(filePath);
+		if (!(file instanceof TFile)) {
+			return false;
+		}
+
+		const fileCache = this.app.metadataCache.getFileCache(file);
+		if (!fileCache?.frontmatter) {
+			return false;
+		}
+
+		// Check if the frontmatter property exists and is truthy
+		const propertyValue = fileCache.frontmatter[this.plugin.settings.frontmatterProperty];
+		return propertyValue === true || propertyValue === "true";
 	}
 
 	createHeader(): HTMLElement {
@@ -299,6 +322,9 @@ export default class View extends ItemView {
 		// Remove the date from context to avoid duplication
 		cleaned = cleaned.replace(new RegExp(date, 'g'), '');
 
+		// Remove empty parentheses left after date removal
+		cleaned = cleaned.replace(/\(\s*\)/g, '');
+
 		// Convert markdown links [text](url) to HTML <a> tags
 		cleaned = cleaned.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="external-link" target="_blank">$1</a>');
 
@@ -343,7 +369,12 @@ export default class View extends ItemView {
 		});
 		dateLink.addEventListener("click", (e) => {
 			e.preventDefault();
-			this.workspace.openLinkText(mention.date, "/", false);
+			// Construct the full path using the configured daily notes path
+			const dailyNotesPath = this.plugin.settings.dailyNotesPath;
+			const fullPath = dailyNotesPath
+				? `${dailyNotesPath}/${mention.date}`
+				: mention.date;
+			this.workspace.openLinkText(fullPath, "/", false);
 		});
 
 		// Context - clean up markdown artifacts

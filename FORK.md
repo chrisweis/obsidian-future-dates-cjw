@@ -117,6 +117,14 @@ See [LICENSE](LICENSE) for details.
 
 ## Changelog
 
+### v1.7.0 (2025-10-19) - Filter Enhancements & Navigation Improvements
+- 🎯 **Filter-based frontmatter exclusion**: Each filter can independently exclude pages with frontmatter flags
+- 📂 **Configurable daily notes path**: Set custom folder path for date files (e.g., "📝 Journal\Days")
+- 🔗 **Long URL support**: Automatically extends context to include complete markdown links
+- 🧹 **Empty parentheses cleanup**: Removes artifact `()` left after date removal
+- 🐛 **Fixed date extraction from paths**: Dates in subfolders now properly recognized
+- ⚙️ **Always-visible frontmatter property**: Setting moved to main exclusion section for easier access
+
 ### v1.6.0 (2025-10-19) - UI Redesign & Advanced Filtering
 - ✨ **Complete UI redesign**: Flat chronological list with month grouping, compact rows
 - 🎯 **View filters**: Create named filters to show dates from specific folders

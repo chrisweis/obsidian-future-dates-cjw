@@ -104,20 +104,26 @@ export default class Model extends EventTarget {
 	}
 
 	extractDate(fileName: string): string | null {
+		// Remove .md extension
 		if (fileName.endsWith(".md")) {
 			fileName = fileName.slice(0, -3);
 		}
 
+		// Extract just the filename from the path (in case it includes folders)
+		// Handle both forward slashes and backslashes
+		const pathParts = fileName.split(/[/\\]/);
+		const baseFileName = pathParts[pathParts.length - 1];
+
 		const { format } = getDailyNoteSettings();
 		if (format) {
-			if (moment(fileName, format, true).isValid()) {
-				return fileName;
+			if (moment(baseFileName, format, true).isValid()) {
+				return baseFileName;
 			}
 			return null;
 		}
 
-		if (dailyRe.test(fileName)) {
-			return fileName;
+		if (dailyRe.test(baseFileName)) {
+			return baseFileName;
 		}
 
 		return null;
@@ -166,12 +172,29 @@ export default class Model extends EventTarget {
 				const startIndex = match.index!;
 				const matchLength = match[0].length;
 
-				const start = Math.max(startIndex - maxContextLength, 0);
-				const end = Math.min(
+				let start = Math.max(startIndex - maxContextLength, 0);
+				let end = Math.min(
 					startIndex + matchLength + maxContextLength,
 					line.length
 				);
+
+				// Extend context to include complete markdown links
+				// Look for incomplete markdown links at boundaries and extend to complete them
 				let substring = line.substring(start, end);
+
+				// Check if we cut off a markdown link at the end
+				// Pattern: [text](url - need to find the closing )
+				const incompleteLinkMatch = substring.match(/\[([^\]]+)\]\(([^)]+)$/);
+				if (incompleteLinkMatch) {
+					// Find the closing ) after our current end position
+					const remainingText = line.substring(end);
+					const closingParenIndex = remainingText.indexOf(')');
+					if (closingParenIndex !== -1 && closingParenIndex < 500) {
+						// Extend end to include the complete link (max 500 chars for safety)
+						end = end + closingParenIndex + 1;
+						substring = line.substring(start, end);
+					}
+				}
 
 				// Replace [[date]] and [[date|text]] with just date for cleaner display
 				substring = substring.replace(/\[\[([^\]]+)\]\]/g, '$1');

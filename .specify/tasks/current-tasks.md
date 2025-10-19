@@ -1,11 +1,109 @@
 # Current Tasks - Obsidian Future Dates CJW
 
-## Active Sprint: v1.6.0 Complete - Maintenance Mode
+## Active Sprint: v1.7.0 Complete - Maintenance Mode
 
 **Sprint Goal:** Maintain quality and monitor for issues
 **Sprint Duration:** Ongoing
-**Current Version:** v1.6.0
+**Current Version:** v1.7.0
 **Priority:** Stability
+
+---
+
+## Recently Completed Tasks (v1.7.0)
+
+### TASK-027: Filter-Based Frontmatter Exclusion
+
+**Status:** 🟢 Complete
+**Priority:** P1 - High
+**Effort:** M (Half day)
+**Completed:** 2025-10-19
+
+**Description:**
+Refactored frontmatter exclusion from a global setting to a per-filter feature for better flexibility.
+
+**Deliverables:**
+- [x] Updated DateFilter interface with excludeByFrontmatter property
+- [x] Removed global excludeByFrontmatter toggle
+- [x] Made frontmatterProperty always visible in settings
+- [x] Added frontmatter toggle to each filter's configuration UI
+- [x] Implemented filter-specific frontmatter checking in view.ts
+- [x] Removed frontmatter check from model.ts collectNotes()
+
+---
+
+### TASK-028: Daily Notes Path Configuration
+
+**Status:** 🟢 Complete
+**Priority:** P1 - High
+**Effort:** S (Hour)
+**Completed:** 2025-10-19
+
+**Description:**
+Added ability to configure custom folder path for daily note files.
+
+**Deliverables:**
+- [x] Added dailyNotesPath setting to interface
+- [x] Created UI input field with examples
+- [x] Path normalization (remove leading/trailing slashes)
+- [x] Updated date click handler to construct full path
+- [x] Support for both forward and backslashes
+- [x] Support for emoji in folder names
+
+---
+
+### TASK-029: Long Markdown Link Support
+
+**Status:** 🟢 Complete
+**Priority:** P2 - Medium
+**Effort:** S (Hour)
+**Completed:** 2025-10-19
+
+**Description:**
+Fixed issue where long markdown links (like Google Maps URLs) were cut off at context boundary.
+
+**Deliverables:**
+- [x] Extended context extraction to detect incomplete links
+- [x] Automatic completion of cut-off URLs (up to 500 chars)
+- [x] Proper rendering of long URLs as clickable links
+
+---
+
+### TASK-030: Context Display Cleanup
+
+**Status:** 🟢 Complete
+**Priority:** P2 - Medium
+**Effort:** XS (30 minutes)
+**Completed:** 2025-10-19
+
+**Description:**
+Various cleanup improvements to context text display.
+
+**Deliverables:**
+- [x] Remove empty parentheses left after date removal
+- [x] Regex: `\(\s*\)` to clean up artifacts
+
+---
+
+### TASK-031: Date Extraction from Paths
+
+**Status:** 🟢 Complete
+**Priority:** P0 - Critical (Bug)
+**Effort:** S (Hour)
+**Completed:** 2025-10-19
+
+**Description:**
+Fixed critical bug where dates disappeared after clicking when using custom daily notes path.
+
+**Root Cause:**
+extractDate() was receiving full paths like "Journal/Days/2025-11-01.md" and failing to recognize the date.
+
+**Fix:**
+Extract just the filename from paths before validating as date.
+
+**Deliverables:**
+- [x] Split path on forward/backslashes
+- [x] Extract basename before date validation
+- [x] Dates in subfolders now properly recognized
 
 ---
 
@@ -265,6 +363,7 @@ Alternative view mode showing dates in calendar format.
 
 ## Version History
 
+- **v1.7.0** (2025-10-19): Filter Enhancements & Navigation Improvements
 - **v1.6.0** (2025-10-19): UI Redesign & Advanced Filtering
 - **v1.5.0** (2025-10-19): Settings & Exclusions
 - **v1.4.0** (2025-10-18): Fork Release with Clean Display & Automation
@@ -273,4 +372,4 @@ Alternative view mode showing dates in calendar format.
 ---
 
 **Last Updated:** 2025-10-19
-**Sprint Status:** v1.6.0 Complete - Maintenance Mode
+**Sprint Status:** v1.7.0 Complete - Maintenance Mode

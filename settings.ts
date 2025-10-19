@@ -6,6 +6,7 @@ export interface DateFilter {
 	name: string;
 	includeFolders: string[]; // Whitelist - if not empty, only show these
 	excludeFolders: string[]; // Blacklist - hide these
+	excludeByFrontmatter: boolean; // If true, exclude pages with frontmatter flag
 }
 
 export interface IconKeywordMapping {
@@ -22,6 +23,7 @@ export interface FutureDatesSettings {
 	customPatterns: string[];
 	excludeFolders: boolean;
 	excludedFolders: string[];
+	frontmatterProperty: string; // Global frontmatter property name for filters to use
 
 	// Display options
 	contextLength: number;
@@ -29,6 +31,9 @@ export interface FutureDatesSettings {
 	rowCompactness: number; // 1 = very compact, 5 = very spacious
 	showFolderIcons: boolean;
 	iconMappings: IconKeywordMapping[];
+
+	// Navigation options
+	dailyNotesPath: string; // Path where daily notes are stored (e.g., "Journal/Days")
 
 	// Filters
 	filters: DateFilter[];
@@ -51,6 +56,7 @@ export const DEFAULT_SETTINGS: FutureDatesSettings = {
 	customPatterns: [],
 	excludeFolders: false,
 	excludedFolders: [],
+	frontmatterProperty: "hide-future-dates",
 
 	// Display defaults
 	contextLength: 50,
@@ -62,6 +68,9 @@ export const DEFAULT_SETTINGS: FutureDatesSettings = {
 		{ icon: "🏠", keywords: ["personal", "home"] },
 		{ icon: "📖", keywords: ["journal", "daily"] }
 	],
+
+	// Navigation defaults
+	dailyNotesPath: "", // Empty = root directory
 
 	// Filter defaults
 	filters: [],
@@ -344,6 +353,26 @@ export class FutureDatesSettingTab extends PluginSettingTab {
 			renderExcludedList();
 		}
 
+		// Frontmatter property for filter-based exclusion
+		new Setting(containerEl)
+			.setName("Frontmatter exclusion property")
+			.setDesc("The frontmatter property name used by filters for page exclusion. Filters can be configured to exclude pages that have this property set to 'true'. Example usage in a note:\n---\n" + this.plugin.settings.frontmatterProperty + ": true\n---")
+			.addText(text => text
+				.setPlaceholder("hide-future-dates")
+				.setValue(this.plugin.settings.frontmatterProperty)
+				.onChange(async (value) => {
+					// Only allow valid property names (letters, numbers, hyphens, underscores)
+					const sanitized = value.replace(/[^a-zA-Z0-9\-_]/g, '');
+					if (sanitized !== value) {
+						text.setValue(sanitized);
+						return;
+					}
+					this.plugin.settings.frontmatterProperty = sanitized || "hide-future-dates";
+					await this.plugin.saveSettings();
+					this.plugin.model.collectNotes();
+				})
+			);
+
 		// ============ DISPLAY SETTINGS ============
 		containerEl.createEl("h3", { text: "Display Options" });
 
@@ -388,6 +417,21 @@ export class FutureDatesSettingTab extends PluginSettingTab {
 					await this.plugin.saveSettings();
 					// Trigger view refresh without re-collecting notes
 					this.plugin.model.dispatchEvent(new Event("change"));
+				})
+			);
+
+		// Daily notes path
+		new Setting(containerEl)
+			.setName("Daily notes folder path")
+			.setDesc("Folder path where daily notes are stored. When clicking a date, the file will be opened/created in this folder. Leave empty for root directory. Examples: 'Journal/Days' or '📝 Journal\\Days'")
+			.addText(text => text
+				.setPlaceholder("Journal/Days")
+				.setValue(this.plugin.settings.dailyNotesPath)
+				.onChange(async (value) => {
+					// Normalize path: remove leading/trailing slashes
+					let normalized = value.trim().replace(/^[\/\\]+|[\/\\]+$/g, '');
+					this.plugin.settings.dailyNotesPath = normalized;
+					await this.plugin.saveSettings();
 				})
 			);
 
@@ -501,7 +545,8 @@ export class FutureDatesSettingTab extends PluginSettingTab {
 						id: `filter-${Date.now()}`,
 						name: `Filter ${this.plugin.settings.filters.length + 1}`,
 						includeFolders: [],
-						excludeFolders: []
+						excludeFolders: [],
+						excludeByFrontmatter: false
 					};
 					this.plugin.settings.filters.push(newFilter);
 					await this.plugin.saveSettings();
@@ -524,7 +569,7 @@ export class FutureDatesSettingTab extends PluginSettingTab {
 		const infoDiv = containerEl.createDiv();
 		infoDiv.innerHTML = `
 			<p>
-				<strong>Future Dates CJW v1.6.0</strong><br>
+				<strong>Future Dates CJW v1.7.0</strong><br>
 				Fork maintained by Chris Weis<br>
 				Original by Dmitry Manannikov
 			</p>
@@ -610,5 +655,18 @@ export class FutureDatesSettingTab extends PluginSettingTab {
 				text.inputEl.rows = 3;
 				text.inputEl.cols = 50;
 			});
+
+		// Exclude by frontmatter
+		new Setting(filterSection)
+			.setName("Exclude pages by frontmatter")
+			.setDesc(`Exclude pages that have the "${this.plugin.settings.frontmatterProperty}" property set to true.`)
+			.addToggle(toggle => toggle
+				.setValue(filter.excludeByFrontmatter)
+				.onChange(async (value) => {
+					filter.excludeByFrontmatter = value;
+					await this.plugin.saveSettings();
+					this.plugin.model.dispatchEvent(new Event("change"));
+				})
+			);
 	}
 }

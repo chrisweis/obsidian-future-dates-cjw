@@ -3,7 +3,7 @@
 ## Project Overview
 
 **Project:** Obsidian Future Dates CJW (Fork)
-**Current Version:** v1.6.0
+**Current Version:** v1.7.0
 **Status:** Production (Active Development)
 **Repository:** https://github.com/chrisweis/obsidian-future-dates-cjw
 **Original:** https://github.com/slonoed/obsidian-future-dates
@@ -448,6 +448,77 @@ This plugin has been fully implemented and released. This plan documents the com
 
 **Status:** Ongoing
 **Responsible:** Chris Weis (Fork Maintainer)
+
+## Phase 5.8: Filter Enhancements & Navigation Improvements ✅ COMPLETED
+
+**Goal:** Enhance filtering system and improve date navigation
+
+**Duration:** 1 day (2025-10-19)
+**Version:** v1.7.0
+
+### Milestone 5.8.1: Filter-Based Frontmatter Exclusion
+
+**Tasks:**
+- [x] Moved frontmatter exclusion from global to per-filter setting
+- [x] Added excludeByFrontmatter property to DateFilter interface
+- [x] Updated filter UI with frontmatter toggle
+- [x] Made frontmatterProperty always visible in settings
+- [x] Implemented filter-specific frontmatter checking in view.ts
+- [x] Removed global frontmatter check from model.ts
+
+**Deliverables:**
+- Per-filter frontmatter exclusion capability
+- More flexible filtering system
+- Clearer UI organization
+
+**Validation:**
+- Different filters can have different frontmatter exclusion settings
+- "All Dates" view unaffected by frontmatter flags
+- Settings properly persist
+
+### Milestone 5.8.2: Daily Notes Path Configuration
+
+**Tasks:**
+- [x] Added dailyNotesPath setting to interface
+- [x] Created UI for folder path configuration
+- [x] Updated date click handler to use configured path
+- [x] Path normalization (remove leading/trailing slashes)
+- [x] Support for both forward and backslashes
+- [x] Support for emoji in folder names
+
+**Deliverables:**
+- Configurable daily notes folder location
+- Proper path construction on click
+- Works with nested folder structures
+
+**Validation:**
+- Date files created in correct folder
+- Existing files in subfolders properly linked
+- Emoji folder names supported
+
+### Milestone 5.8.3: Context Display Improvements
+
+**Tasks:**
+- [x] Extended context extraction for long markdown links
+- [x] Automatic completion of cut-off URLs
+- [x] Empty parentheses cleanup after date removal
+- [x] Fixed date extraction from folder paths
+
+**Deliverables:**
+- Complete markdown links preserved
+- Cleaner context display
+- Dates in subfolders recognized
+
+**Validation:**
+- Long Google Maps URLs properly converted to clickable links
+- No empty () artifacts in context
+- Dates remain visible after file creation in subfolders
+
+**Results:**
+- Frontmatter exclusion now part of flexible filter system
+- Daily notes can be organized in custom folders
+- Context display cleaner and more functional
+- Date navigation more robust
 
 ### Maintenance Activities
 

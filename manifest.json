@@ -1,7 +1,7 @@
 {
 	"id": "future-dates-cjw",
 	"name": "Future Dates CJW",
-	"version": "1.6.0",
+	"version": "1.7.0",
 	"minAppVersion": "0.15.0",
 	"description": "Show list of future dates in vault with enhanced display (Fork with improvements)",
 	"author": "Chris Weis (fork of original by Dmitry Manannikov)",
