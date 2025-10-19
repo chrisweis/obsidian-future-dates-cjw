@@ -2,10 +2,11 @@
 
 ## Project Overview
 
-**Project:** Obsidian Future Dates Plugin
-**Current Version:** v1.3.4
-**Status:** Production (Maintenance Mode)
-**Repository:** https://github.com/slonoed/obsidian-future-dates
+**Project:** Obsidian Future Dates CJW (Fork)
+**Current Version:** v1.6.0
+**Status:** Production (Active Development)
+**Repository:** https://github.com/chrisweis/obsidian-future-dates-cjw
+**Original:** https://github.com/slonoed/obsidian-future-dates
 
 ## Development Status
 
@@ -245,6 +246,7 @@ This plugin has been fully implemented and released. This plan documents the com
 **Goal:** Improve fork with UX and developer experience enhancements
 
 **Duration:** 1 day (2025-10-18)
+**Version:** v1.4.0
 
 ### Milestone 5.5.1: Clean Date Display
 
@@ -302,6 +304,143 @@ This plugin has been fully implemented and released. This plan documents the com
 - Comprehensive documentation
 - GitHub repository ready
 - All spec-kit docs updated
+
+---
+
+## Phase 5.6: Settings & Exclusions ✅ COMPLETED
+
+**Goal:** Add comprehensive settings UI with multiple exclusion options
+
+**Duration:** 1 day (2025-10-19)
+**Version:** v1.5.0
+
+### Milestone 5.6.1: Settings Infrastructure
+
+**Tasks:**
+- [x] Created settings interface with exclusion and display options
+- [x] Implemented settings persistence via Obsidian API
+- [x] Added settings tab integration
+- [x] Created default settings configuration
+
+**Deliverables:**
+- Complete settings infrastructure
+- Settings tab in Obsidian UI
+- Persistent user preferences
+
+### Milestone 5.6.2: Date Exclusion Features
+
+**Tasks:**
+- [x] Exclude dates with display text (e.g., `[[2025-10-19|Next Day]]`)
+- [x] Exclude navigation keywords (configurable list)
+- [x] Custom regex pattern exclusions
+- [x] Folder-based exclusions with search UI
+- [x] `shouldExcludeLine()` method implementation
+
+**Deliverables:**
+- Flexible exclusion system
+- User control over what appears in view
+- Better signal-to-noise ratio
+
+### Milestone 5.6.3: Display Options
+
+**Tasks:**
+- [x] Context length slider (10-200 characters)
+- [x] Show past dates toggle
+- [x] Interactive folder browser with search
+- [x] Real-time settings updates
+
+**Deliverables:**
+- Customizable display preferences
+- User-friendly folder exclusion interface
+- Immediate feedback on changes
+
+**Validation:**
+- All exclusion filters work correctly
+- Settings persist across restarts
+- UI updates dynamically
+
+---
+
+## Phase 5.7: UI Redesign & Advanced Filtering ✅ COMPLETED
+
+**Goal:** Complete UI overhaul with advanced filtering capabilities
+
+**Duration:** 1 day (2025-10-19)
+**Version:** v1.6.0
+
+### Milestone 5.7.1: UI Redesign
+
+**Tasks:**
+- [x] Redesigned from hierarchical to flat chronological list
+- [x] Added month grouping headers with light gray backgrounds
+- [x] Implemented compact row-based layout
+- [x] Added row spacing control setting (1-5 scale)
+- [x] Improved folder display to show root folder
+- [x] Added context cleaning (remove markdown artifacts)
+
+**Deliverables:**
+- Modern, compact UI design
+- Better use of vertical space
+- Cleaner date row display
+- Configurable compactness
+
+**Validation:**
+- UI renders correctly
+- Month backgrounds visible
+- Rows adjustable via setting
+
+### Milestone 5.7.2: View Filters System
+
+**Tasks:**
+- [x] Implemented named filter infrastructure
+- [x] Filter dropdown in view header
+- [x] Filter settings UI (create/edit/delete)
+- [x] Include/exclude folder logic per filter
+- [x] Dynamic filter counts in dropdown
+- [x] Active filter persistence
+
+**Deliverables:**
+- Full filtering system
+- Multiple named filters
+- Real-time count updates
+- Folder-based filtering
+
+**Validation:**
+- Filters apply correctly
+- Counts accurate
+- Selection persists
+
+### Milestone 5.7.3: Folder Icon System
+
+**Tasks:**
+- [x] Configurable emoji/character icons (up to 3 chars)
+- [x] Keyword-based icon detection
+- [x] Enable/disable toggle
+- [x] Icon mapping UI (add/edit/remove)
+- [x] Support for any emoji or character
+
+**Deliverables:**
+- Flexible icon system
+- User-defined mappings
+- Visual folder identification
+
+**Validation:**
+- Icons display correctly
+- Mappings work as expected
+- Toggle works properly
+
+### Milestone 5.7.4: Bug Fixes
+
+**Tasks:**
+- [x] Fixed display text detection (dates with `|` now found)
+- [x] Fixed navigation keywords UI (field appears on toggle)
+- [x] Fixed folder display (root instead of parent)
+- [x] Improved folder exclusion UI (search-based)
+
+**Deliverables:**
+- More robust date detection
+- Better UX for settings
+- Correct folder identification
 
 ---
 

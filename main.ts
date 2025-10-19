@@ -14,7 +14,7 @@ class ObsidianFutureDatesPlugin extends Plugin {
 
 		this.registerView(
 			FutureDatesView.TYPE,
-			(leaf) => new FutureDatesView(leaf, this.model, this.app.workspace)
+			(leaf) => new FutureDatesView(leaf, this.model, this.app.workspace, this)
 		);
 
 		this.addSettingTab(new FutureDatesSettingTab(this.app, this));

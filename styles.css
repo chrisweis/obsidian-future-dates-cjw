@@ -1,1 +1,191 @@
-.obsidian-future-dates {}
+/* Future Dates View - Main Container */
+.future-dates-view {
+	padding: 8px;
+	height: 100%;
+	overflow-y: auto;
+}
+
+/* Header Section */
+.future-dates-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 8px 12px;
+	margin-bottom: 12px;
+	gap: 8px;
+}
+
+.future-dates-filter {
+	flex: 1;
+}
+
+.future-dates-filter select {
+	width: 100%;
+	padding: 4px 8px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 4px;
+	background-color: var(--background-primary);
+	color: var(--text-normal);
+	font-size: 14px;
+}
+
+.future-dates-settings-button {
+	padding: 4px;
+	border-radius: 4px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.future-dates-settings-button:hover {
+	background-color: var(--background-modifier-hover);
+}
+
+/* Content Area */
+.future-dates-content {
+	padding: 0 4px;
+}
+
+/* Empty State */
+.future-dates-empty {
+	text-align: center;
+	padding: 40px 20px;
+	color: var(--text-muted);
+	font-size: 14px;
+}
+
+/* Month Section - Just a wrapper, no background */
+.future-dates-month-section {
+	margin-bottom: 12px;
+}
+
+/* Month Headers - Full-width gray background */
+.future-dates-month-header {
+	background-color: rgba(0, 0, 0, 0.04);
+	padding: 6px 8px;
+	margin: 0 -8px 8px -8px;
+	font-weight: 600;
+	font-size: 13px;
+	color: var(--text-normal);
+}
+
+.theme-dark .future-dates-month-header {
+	background-color: rgba(255, 255, 255, 0.06);
+}
+
+.future-dates-month-content {
+	margin-bottom: 0;
+}
+
+/* Row Layout */
+.future-dates-row {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	padding: 4px 8px;
+	margin: 1px 0;
+	gap: 16px;
+	border-radius: 3px;
+	transition: background-color 0.1s ease;
+}
+
+.future-dates-row:hover {
+	background-color: var(--background-modifier-hover);
+}
+
+/* Left Side: Date + Context */
+.future-dates-left {
+	flex: 1;
+	min-width: 0; /* Allow text truncation */
+}
+
+.future-dates-date {
+	font-weight: 500;
+	color: var(--text-normal);
+	text-decoration: none;
+	font-size: 13px;
+	margin-right: 8px;
+}
+
+.future-dates-date:hover {
+	color: var(--text-accent);
+	text-decoration: underline;
+}
+
+.future-dates-context {
+	display: inline;
+	color: var(--text-normal);
+	font-size: 13px;
+	line-height: 1.5;
+}
+
+/* Right Side: Source File */
+.future-dates-right {
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+}
+
+.future-dates-source {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	text-decoration: none;
+	color: var(--text-muted);
+	font-size: 12px;
+	white-space: nowrap;
+	padding: 2px 8px;
+	border-radius: 3px;
+	transition: all 0.1s ease;
+}
+
+.future-dates-source:hover {
+	background-color: var(--background-modifier-hover);
+	color: var(--text-accent);
+}
+
+.future-dates-folder-icon {
+	display: inline-flex;
+	align-items: center;
+	width: 14px;
+	height: 14px;
+}
+
+.future-dates-folder-icon svg {
+	width: 14px;
+	height: 14px;
+}
+
+.future-dates-folder-name {
+	font-size: 12px;
+}
+
+/* Folder Icon Colors */
+.future-dates-source:hover .future-dates-folder-icon {
+	color: var(--text-accent);
+}
+
+/* Responsive adjustments */
+@media (max-width: 500px) {
+	.future-dates-row {
+		flex-direction: column;
+		gap: 6px;
+	}
+
+	.future-dates-right {
+		align-self: flex-start;
+	}
+}
+
+
+/* List reset (remove default ul/li styling from old design) */
+.future-dates-view ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.future-dates-view li {
+	margin: 0;
+}

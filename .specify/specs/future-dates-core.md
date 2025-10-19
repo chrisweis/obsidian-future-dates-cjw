@@ -3,9 +3,10 @@
 ## Overview
 
 **Feature:** Automatic collection and display of future date links
-**Status:** Implemented (v1.3.4)
+**Status:** Implemented (v1.6.0)
 **Type:** Core Plugin Functionality
 **Priority:** P0 (Critical)
+**Fork:** Future Dates CJW by Chris Weis
 
 ## Problem Statement
 
