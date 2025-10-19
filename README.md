@@ -1,26 +1,51 @@
 # Future Dates CJW - Obsidian Plugin
 
-> **Note:** This is a fork of the [original Future Dates plugin](https://github.com/slonoed/obsidian-future-dates) by Dmitry Manannikov, with enhancements. See [FORK.md](FORK.md) for details.
+> **Note:** This is a fork of the [original Future Dates plugin](https://github.com/slonoed/obsidian-future-dates) by Dmitry Manannikov, with significant enhancements. See [FORK.md](FORK.md) for complete changelog.
 
 ![Future dates plugin screenshot that demonstrates how it works](./extra/screenshot.png "Future dates plugin screenshot")
 
 ## Overview
 
-Future Dates CJW creates a new view in the right panel that automatically collects all links to future dates in your vault. It's helpful to track all upcoming events, deadlines, and tasks in one centralized location.
+Future Dates CJW creates a sleek sidebar view that automatically collects and displays all links to future dates across your vault. With advanced filtering, customizable folder icons, and a redesigned interface, it's the perfect tool for tracking upcoming events, deadlines, and tasks.
 
 ## Features
 
-✨ **Core Features:**
+### 🎨 Modern UI (v1.6.0)
+- **Flat chronological list** with month grouping for easy scanning
+- **Compact row layout** with adjustable spacing (1-5 scale)
+- **Month section backgrounds** for visual separation
+- **Clickable hyperlinks** in context display
+- **Root folder display** for better navigation
+- **Clean context** with markdown artifacts removed
+
+### 🔍 Advanced Filtering (v1.6.0)
+- **Named filters** to organize views by folder
+- **Include/exclude folder rules** for precise control
+- **Dynamic counts** showing number of dates per filter (e.g., "Work (45)")
+- **Filter persistence** across sessions
+- **Quick filter switching** from dropdown
+
+### 📁 Customizable Folder Icons (v1.6.0)
+- **Emoji support** - use any emoji or character (up to 3 chars)
+- **Keyword-based detection** - automatic icon assignment
+- **Toggle on/off** to show/hide icons
+- **Pre-configured mappings** (💼 work, 🏠 personal, 📖 journal)
+
+### ⚙️ Comprehensive Settings (v1.5.0)
+- **Exclude dates with display text** - filter out navigation links
+- **Navigation keyword exclusion** - configurable keyword list
+- **Custom regex patterns** - advanced exclusion rules
+- **Folder exclusions** - hide specific folders
+- **Context length control** - adjust how much text to show
+- **Show past dates toggle** - optionally include historical dates
+
+### ✨ Core Features
 - Automatically collects all future date references from your vault
-- Displays dates in chronological order
-- Shows source files and context for each mention
+- Displays dates in chronological order with context
 - Real-time updates when you modify notes
 - Click to navigate to dates or source files
-
-🎯 **Enhanced in v1.4.0:**
-- **Clean date display**: Shows `2025-12-25` instead of `[[2025-12-25]]` for better readability
-- **Improved code quality**: Removed debug logging, cleaner codebase
-- **Comprehensive documentation**: Full spec-kit documentation in `.specify/` directory
+- Clean date display (shows `2025-12-25` instead of `[[2025-12-25]]`)
+- Supports both resolved and unresolved links
 
 ## Installation
 
@@ -37,27 +62,41 @@ Search for "Future Dates CJW" in Settings → Community Plugins
 
 ## How It Works
 
-This plugin uses the "Daily Notes" plugin to detect date formats. It scans both resolved and unresolved links in your vault, finding all references to future dates.
+The plugin scans both resolved and unresolved links in your vault, detecting all references to future dates using your Daily Notes format settings.
 
 ### Supported Date Formats
 - Default: `[[YYYY-MM-DD]]` (e.g., `[[2025-12-25]]`)
 - Custom formats from Daily Notes settings
+- Works with dates that have display text (e.g., `[[2025-12-25|Christmas]]`)
 
-### Display Structure
+### Display Structure (v1.6.0)
+The modern flat list groups dates by month:
+
 ```
-📅 2025-12-25
-  📄 Projects/Work.md
-    Meeting with team about 2025-12-25 deadline
-  📄 Personal/Todo.md
-    Dentist appointment on 2025-12-25 at 2pm
+October 2025 [month header with light background]
+  2025-10-25  Meeting about Q4 deadline          💼 Work
+  2025-10-28  Dentist appointment at 2pm         🏠 Personal
+
+November 2025 [month header with light background]
+  2025-11-15  Product launch scheduled           💼 Work
+  2025-11-20  Submit quarterly report            💼 Work
 ```
+
+### View Filters
+Create custom filters to focus on specific areas:
+- **All Dates (127)** - Shows everything
+- **Work (45)** - Only dates from work folders
+- **Personal (23)** - Only dates from personal folders
+- **Projects (18)** - Custom filter with include/exclude rules
 
 ## Usage
 
-1. Create links to future dates in your notes: `[[2025-12-25]]`
-2. The plugin automatically detects and displays them in the right sidebar
-3. Click on dates to open the daily note
-4. Click on source files to jump to that note
+1. **Add date links** to your notes: `[[2025-12-25]]` or `[[2025-12-25|Christmas]]`
+2. **View automatically updates** in the right sidebar
+3. **Click dates** to open/create the daily note
+4. **Click folders** to jump to the source note
+5. **Switch filters** to focus on specific categories
+6. **Adjust settings** to customize display and exclusions
 
 ## Development
 
@@ -104,25 +143,38 @@ npm run deploy:only
 .
 ├── main.ts              # Plugin entry point
 ├── model.ts             # Data collection and processing
-├── view.ts              # UI rendering
+├── view.ts              # UI rendering (month grouping, filters)
+├── settings.ts          # Settings UI and configuration
+├── styles.css           # Custom styling
 ├── .specify/            # Spec-kit documentation
 │   ├── memory/
 │   │   └── constitution.md
 │   ├── specs/
+│   │   └── future-dates-core.md
 │   ├── tasks/
+│   │   └── current-tasks.md
 │   └── plan.md
+├── FORK.md              # Fork changelog
 └── README.md
 ```
 
 ## Roadmap
 
-See `.specify/tasks/current-tasks.md` for detailed task list.
+**Current Version:** v1.6.0 (Stable)
 
-**Upcoming Features:**
-- Error handling for file operations (v1.4.x)
-- Settings panel for customization (v2.0)
-- Filtering and search (v2.0)
-- Mobile support (v3.0)
+**Completed:**
+- ✅ Settings panel for customization (v1.5.0)
+- ✅ Filtering and folder management (v1.6.0)
+- ✅ UI redesign with month grouping (v1.6.0)
+- ✅ Folder icons and customization (v1.6.0)
+
+**Future Enhancements:**
+- Advanced filter logic with AND/OR operators
+- Mobile support for iOS/Android
+- Calendar view mode
+- Export functionality
+
+See `.specify/tasks/current-tasks.md` for detailed task tracking.
 
 ## Credits
 
