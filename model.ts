@@ -145,8 +145,13 @@ export default class Model extends EventTarget {
 	getSubstringsWithPattern(text: string, pattern: string): string[] {
 		const matches: string[] = [];
 		const lines = text.split("\n");
-		const patternLength = pattern.length;
 		const maxContextLength = this.settings.contextLength;
+
+		// Extract date from pattern (remove [[ and ]])
+		const date = pattern.slice(2, -2);
+
+		// Create regex to match both [[date]] and [[date|display text]]
+		const dateRegex = new RegExp(`\\[\\[${this.escapeRegex(date)}(?:\\|[^\\]]+)?\\]\\]`, 'g');
 
 		for (const line of lines) {
 			// Check if line should be excluded
@@ -154,21 +159,24 @@ export default class Model extends EventTarget {
 				continue;
 			}
 
-			let startIndex = line.indexOf(pattern);
-			while (startIndex !== -1) {
+			// Find all matches of the date (with or without display text)
+			const matchesInLine = Array.from(line.matchAll(dateRegex));
+
+			for (const match of matchesInLine) {
+				const startIndex = match.index!;
+				const matchLength = match[0].length;
+
 				const start = Math.max(startIndex - maxContextLength, 0);
 				const end = Math.min(
-					startIndex + patternLength + maxContextLength,
+					startIndex + matchLength + maxContextLength,
 					line.length
 				);
 				let substring = line.substring(start, end);
 
-				// Replace [[date]] with just date for cleaner display
+				// Replace [[date]] and [[date|text]] with just date for cleaner display
 				substring = substring.replace(/\[\[([^\]]+)\]\]/g, '$1');
 
 				matches.push(substring);
-
-				startIndex = line.indexOf(pattern, startIndex + patternLength);
 			}
 		}
 

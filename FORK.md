@@ -117,6 +117,29 @@ See [LICENSE](LICENSE) for details.
 
 ## Changelog
 
+### v1.6.0 (2025-10-19) - UI Redesign & Advanced Filtering
+- ✨ **Complete UI redesign**: Flat chronological list with month grouping, compact rows
+- 🎯 **View filters**: Create named filters to show dates from specific folders
+- 📊 **Dynamic filter counts**: Each filter shows number of dates (e.g., "Work (45)")
+- 🎨 **Configurable folder icons**: Use emojis or characters (up to 3 chars) with keyword detection
+- 🔧 **Row spacing control**: Slider to adjust compactness (1-5 scale)
+- 🧹 **Context cleaning**: Removes markdown artifacts (table separators, bullets, task markers)
+- 🔍 **Improved folder exclusion**: Search-based UI for easier folder management
+- 🐛 **Fixed display text detection**: Dates with display text (e.g., `[[2025-10-19|Next Day]]`) now properly detected
+- 🐛 **Fixed navigation keywords UI**: Settings field now appears when toggle is enabled
+- 📁 **Root folder display**: Shows root folder instead of parent folder
+- ⚙️ **Configurable navigation keywords**: Edit keywords list when exclusion is enabled
+
+### v1.5.0 (2025-10-19) - Settings & Exclusions
+- ⚙️ **Comprehensive settings UI**: Full control over date exclusions and display
+- 🚫 **Exclude dates with display text**: Filter out navigation links (e.g., `[[2025-10-19|Next Day]]`)
+- 🧭 **Exclude navigation keywords**: Configurable keyword-based exclusion
+- 🎨 **Custom regex patterns**: Advanced exclusion with custom regular expressions
+- 📁 **Folder exclusions**: Interactive folder browser with search
+- 📊 **Context length control**: Adjustable character count around date mentions
+- 📅 **Show past dates option**: Toggle to include/exclude past dates
+- 🔧 **Settings persistence**: All preferences saved and restored
+
 ### v1.4.0 (2025-10-18) - Fork Release
 - **Forked from original v1.3.4**
 - ✨ **Clean date display**: Shows `2025-12-25` instead of `[[2025-12-25]]` in context

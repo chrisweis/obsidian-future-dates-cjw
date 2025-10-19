@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-future-dates-cjw",
-	"version": "1.5.0",
+	"version": "1.6.0",
 	"description": "Show list of future dates in vault with enhanced display (Fork)",
 	"main": "main.js",
 	"scripts": {
